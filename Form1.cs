@@ -16,13 +16,11 @@ namespace Spam_App
         private const int HOTKEY_ID = 1;
         private const int WM_HOTKEY = 0x0312;
 
-        // Durum Değişkenleri
+
         private int geriSayim = 3;
         private int spamSayaci = 0;
         private int spamLimiti = 0;
         private bool isHotKeyRegistered = false;
-
-        // Timer nesnesi
         private System.Windows.Forms.Timer geriSayimTimer;
 
         public Form1()
@@ -30,7 +28,7 @@ namespace Spam_App
             InitializeComponent();
             geriSayimTimer = new System.Windows.Forms.Timer();
         }
-
+        
         protected override void WndProc(ref Message m)
         {
             if (m.Msg == WM_HOTKEY && m.WParam.ToInt32() == HOTKEY_ID)
@@ -67,8 +65,6 @@ namespace Spam_App
             {
                 SendKeys.Send("{ENTER}");
             }
-
-            // Limit Kontrolü
             if (spamLimiti > 0)
             {
                 spamSayaci++;
