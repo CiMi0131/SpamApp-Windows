@@ -7,7 +7,6 @@ namespace Spam_App
 {
     public partial class Form1 : Form
     {
-        // Windows API Importları (Global Hotkey İçin)
         [DllImport("user32.dll", SetLastError = true)]
         private static extern bool RegisterHotKey(IntPtr hWnd, int id, int fsModifiers, int vk);
 
@@ -29,14 +28,11 @@ namespace Spam_App
         public Form1()
         {
             InitializeComponent();
-
-            // Timer'ı güvenli şekilde başlatıyoruz
             geriSayimTimer = new System.Windows.Forms.Timer();
         }
 
         protected override void WndProc(ref Message m)
         {
-            // Global Hotkey tetiklendiğinde (F6) CheckBox durumunu tersine çevirir
             if (m.Msg == WM_HOTKEY && m.WParam.ToInt32() == HOTKEY_ID)
             {
                 checkBox1.Checked = !checkBox1.Checked;
@@ -48,8 +44,6 @@ namespace Spam_App
         {
             geriSayimTimer.Interval = 1000;
             geriSayimTimer.Tick += GeriSayimTimer_Tick;
-
-            // F6 tuşunu uygulamaya kaydet
             isHotKeyRegistered = RegisterHotKey(this.Handle, HOTKEY_ID, 0, (int)Keys.F6);
         }
 
@@ -61,17 +55,14 @@ namespace Spam_App
             {
                 try
                 {
-                    // Özel karakterleri güvenli hale getirip direkt gönderiyoruz
                     string safeText = EncodeSendKeysText(text);
                     SendKeys.Send(safeText);
                 }
                 catch
                 {
-                    // Gönderim sırasında oluşabilecek anlık odak kayıplarını absorbe etmek için
+
                 }
             }
-
-            // Eğer enter seçeneği aktifse metnin arkasından ENTER tuşu basar
             if (checkBoxEnter.Checked)
             {
                 SendKeys.Send("{ENTER}");
@@ -87,8 +78,6 @@ namespace Spam_App
                 }
             }
         }
-
-        // SendKeys için özel karakterleri kaçıran (escape) güvenli metot
         private string EncodeSendKeysText(string input)
         {
             if (string.IsNullOrEmpty(input)) return input;
@@ -96,7 +85,6 @@ namespace Spam_App
             StringBuilder sb = new StringBuilder();
             foreach (char c in input)
             {
-                // SendKeys için özel anlam ifade eden karakterler süslü paranteze alınır
                 if (c == '+' || c == '^' || c == '%' || c == '~' ||
                     c == '(' || c == ')' || c == '{' || c == '}' ||
                     c == '[' || c == ']')
